@@ -18,14 +18,22 @@ ment LEDs are connected together, and connect to 7 pins of the MCU. These pins a
  <img width="865" height="514" alt="1" src="https://github.com/user-attachments/assets/d9a58f62-37d6-44c8-b196-289515fb0f43" />
 
 Components used in the schematic are listed bellow:
+
 • 7SEG-COM-ANODE(connected from PB0 to PB6)
+
 • LED-RED
+
 • PNP
+
 • RES
+
 • STM32F103C6
  
  Students are proposed to use the function display7SEG(intnum) in the Lab 1 in this exercise. Implement the source code intheinterrupt callback function to display number "1"
  on the first seven segment and number "2" for second one. The switching time between 2 LEDs is half of second.
+ 
  Report 1: Capture your schematic from Proteus and show in the report.
+ 
  Report 2: Present your source code in the HAL_TIM_PeriodElapsedCallback function.
+ 
  Short question: What is the frequency of the scanning process?

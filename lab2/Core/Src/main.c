@@ -240,25 +240,8 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter_scan = 50;
-int counter_dot = 100;
-int index_led = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-    if(htim->Instance == TIM2){
-        counter_scan--;
-        counter_dot--;
-
-        if(counter_scan <= 0){
-            counter_scan = 50;       // 0.5 s
-            index_led = (index_led + 1) % 4;
-            display7SEG(index_led);
-        }
-
-        if(counter_dot <= 0){
-            counter_dot = 100;       // 1 s
-            HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);  // DOT LED
-        }
-    }
+	timerRun();
 }
 /* USER CODE END 4 */
 

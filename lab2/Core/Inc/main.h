@@ -8,6 +8,9 @@ extern "C" {
 #include "stm32f1xx_hal.h"
 
 void Error_Handler(void);
+void display7SEG(int num);
+void handleTimer0();
+void handleTimer1();
 
 #define LED_RED_Pin GPIO_PIN_5
 #define LED_RED_GPIO_Port GPIOA

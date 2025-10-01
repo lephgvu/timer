@@ -121,6 +121,32 @@ void display7SEG(int num) {
 	}
 }
 
+
+void handleTimer0() {
+	if (isTimerExpired(0) == 1){
+		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		setTimer(0, 100);
+	}
+}
+
+static int segmentDisplay = 1;
+void handleTimer1() {
+	if (isTimerExpired(1)){
+		if (segmentDisplay == 1){
+			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
+			display7SEG(1);
+			segmentDisplay = 2;
+		} else {
+			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_RESET);
+			display7SEG(2);
+			segmentDisplay = 1;
+		}
+		setTimer(1, 50);
+	}
+}
+
 int main(void)
 {
   HAL_Init();
@@ -133,38 +159,10 @@ int main(void)
 
   setTimer(0, 100);
   setTimer(1, 50);
-  int segmentDisplay = 1;
 
-  while (1)
-  {
-	  if (isTimerExpired(0) == 1){
-		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-		  setTimer(0, 100);
-	  }
-
-	  if (isTimerExpired(1) == 1){
-		  switch(segmentDisplay){
-		  	  case 1:
-		  		  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);
-		  		  HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
-		  		  display7SEG(1);
-		  		  segmentDisplay = 2;
-		  		  break;
-
-		  	  case 2:
-		  		  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
-		  		  HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_RESET);
-		  		  display7SEG(2);
-		  		  segmentDisplay = 1;
-		  		  break;
-
-		  	  default:
-		  		  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
-		  		  HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
-		  		  break;
-		  }
-		  setTimer(1, 50);
-	  }
+  while (1) {
+	  handleTimer0();
+	  handleTimer1();
   }
 }
 

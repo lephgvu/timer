@@ -123,7 +123,7 @@ void display7SEG(int num) {
 
 
 void handleTimer0() {
-	if (isTimerExpired(0) == 1){
+	if (isTimerExpired(0)){
 		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 		setTimer(0, 100);
 	}

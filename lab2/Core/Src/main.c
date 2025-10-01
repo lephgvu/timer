@@ -1,4 +1,5 @@
 #include "main.h"
+#include "software_timer.h"
 
 TIM_HandleTypeDef htim2;
 
@@ -120,6 +121,39 @@ void display7SEG(int num) {
 	}
 }
 
+int led_buffer[4] = {1, 2, 3, 0};   // Display 12:30
+int scan_index = 0;                // 0 is EN0, 1 is EN1, ...
+
+void update7SEG(int index){
+	// Turn off all ENs
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_SET);
+
+	// Turn on the corresponding 7SEG
+	switch(index){
+		case 0:
+			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);
+			break;
+
+		case 1:
+			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_RESET);
+			break;
+
+		case 2:
+			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_RESET);
+			break;
+
+		case 3:
+			HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_RESET);
+			break;
+	}
+
+	// Display
+	display7SEG(led_buffer[index]);
+}
+
 int main(void)
 {
   HAL_Init();
@@ -130,9 +164,26 @@ int main(void)
 
   HAL_TIM_Base_Start_IT(&htim2);
 
+  setTimer(0, 100);
+  setTimer(1, 50);
+
   while (1)
   {
+	if(isTimerExpired(0)){
+		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+		setTimer(0, 100);
+	}
 
+	if(isTimerExpired(1)){
+		update7SEG(scan_index);
+		scan_index++;
+
+		if(scan_index >= 4)
+			scan_index = 0;
+
+		setTimer(1, 50);
+	}
   }
 }
 

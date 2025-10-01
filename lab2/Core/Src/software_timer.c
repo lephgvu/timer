@@ -5,10 +5,10 @@
  *      Author: Admin
  */
 #include "software_timer.h"
-#define TIMER 10
+#define NUMBERS_OF_TIMER 10
 
-int timer_counter[TIMER];
-int timer_flag[TIMER];
+int timer_counter[NUMBERS_OF_TIMER];
+int timer_flag[NUMBERS_OF_TIMER];
 
 void setTimer(int index, int duration){
 	timer_counter[index] = duration;
@@ -16,14 +16,11 @@ void setTimer(int index, int duration){
 }
 
 int isTimerExpired(int index){
-	if (timer_flag[index] == 0)
-		return 0;
-
-	return 1;
+	return timer_flag[index];
 }
 
 void timerRun(){
-	for (int i = 0; i < TIMER; i++){
+	for (int i = 0; i < NUMBERS_OF_TIMER; i++){
 		if (timer_counter[i] > 0){
 			timer_counter[i]--;
 			if (timer_counter[i] <= 0)

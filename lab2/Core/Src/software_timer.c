@@ -16,7 +16,8 @@ void setTimer(int index, int duration){
 }
 
 int isTimerExpired(int index){
-	if (timer_flag[index] == 0) return 0;
+	if (timer_flag[index] == 0)
+		return 0;
 
 	return 1;
 }

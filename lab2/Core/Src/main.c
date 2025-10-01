@@ -133,7 +133,7 @@ int main(void)
 
   setTimer(0, 100);
   setTimer(1, 50);
-  int seg_index = 1;
+  int segmentDisplay = 1;
 
   while (1)
   {
@@ -143,20 +143,24 @@ int main(void)
 	  }
 
 	  if (isTimerExpired(1) == 1){
-		  switch(seg_index){
+		  switch(segmentDisplay){
 		  	  case 1:
 		  		  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);
 		  		  HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
 		  		  display7SEG(1);
-		  		  seg_index++;
+		  		  segmentDisplay = 2;
 		  		  break;
+
 		  	  case 2:
 		  		  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
 		  		  HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_RESET);
 		  		  display7SEG(2);
-		  		  seg_index = 1;
+		  		  segmentDisplay = 1;
 		  		  break;
+
 		  	  default:
+		  		  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
+		  		  HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
 		  		  break;
 		  }
 		  setTimer(1, 50);

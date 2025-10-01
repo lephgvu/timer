@@ -142,7 +142,7 @@ int main(void)
 		  setTimer(0, 100);
 	  }
 
-	  if (isTimerExpired(1) == 1) {
+	  if (isTimerExpired(1) == 1){
 		  switch(segmentDisplay){
 		  	  case 1:
 		  		  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);

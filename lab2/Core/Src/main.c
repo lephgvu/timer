@@ -7,6 +7,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 
+/* ==================== display7SEG function ==================== */
 void display7SEG(int num) {
 	switch(num) {
 	case 0:
@@ -122,8 +123,9 @@ void display7SEG(int num) {
 }
 
 int index_led = 0;
-int led_buffer[4] = {1, 2, 3, 4};
+int led_buffer[4] = {0};
 
+/* ==================== update7SEG function ==================== */
 void update7SEG(int index){
 	// Turn off all 7SEG
 	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
@@ -157,6 +159,15 @@ void update7SEG(int index){
 	}
 }
 
+/* ==================== UpdateClockBuffer function ==================== */
+int hour = 15, minute = 8, second = 50;
+void updateClockBuffer(){
+	led_buffer[0] = hour / 10;
+	led_buffer[1] = hour % 10;
+	led_buffer[2] = minute / 10;
+	led_buffer[3] = minute % 10;
+}
+
 int main(void)
 {
   HAL_Init();
@@ -167,22 +178,45 @@ int main(void)
 
   HAL_TIM_Base_Start_IT(&htim2);
 
+  // Timer0: Blinky LED_RED, DOT
   setTimer(0, 100);
+
+  // Timer1: Scanning LEDs 7SEG
   setTimer(1, 25);
+
+  // Timer2: Increase time per second
+  setTimer(2, 100);
 
   while (1)
   {
-	if(isTimerExpired(0)){
-		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-		setTimer(0, 100);
-	}
+	  if(isTimerExpired(0)){
+		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+		  setTimer(0, 100);
+	  }
 
-	if(isTimerExpired(1)){
-		update7SEG(index_led++);
-		if(index_led >= 4) index_led = 0;
-		setTimer(1, 25);
-	}
+	  if(isTimerExpired(1)){
+		  update7SEG(index_led++);
+		  if(index_led >= 4) index_led = 0;
+		  setTimer(1, 25);
+	  }
+
+	  if(isTimerExpired(2)){
+		  second++;
+		  if(second >= 60){
+			  second = 0;
+			  minute++;
+		  }
+		  if(minute >= 60){
+			  minute = 0;
+			  hour++;
+		  }
+		  if(hour >= 24){
+			  hour = 0;
+		  }
+		  updateClockBuffer();
+		  setTimer(2, 100);
+	  }
   }
 }
 

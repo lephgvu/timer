@@ -167,15 +167,21 @@ int main(void)
 
   HAL_TIM_Base_Start_IT(&htim2);
 
-  int index = 0;
-  setTimer(0, 50);
+  setTimer(0, 100);
+  setTimer(1, 25);
 
   while (1)
   {
 	if(isTimerExpired(0)){
-		setTimer(0, 50);
-		update7SEG(index++);
-		if(index >= 4) index = 0;
+		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+		setTimer(0, 100);
+	}
+
+	if(isTimerExpired(1)){
+		update7SEG(index_led++);
+		if(index_led >= 4) index_led = 0;
+		setTimer(1, 25);
 	}
   }
 }

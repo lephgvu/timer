@@ -15,3 +15,10 @@ Practice Lab 2 of MCP-MCU course
  Report 2: Present the source code in the HAL_TIM_PeriodElapsedCallback.
  
  Students are proposed to change the values in the led_buffer array for unit test this function, which is used afterward.
+
+---------------------------------------------------------------------------------------------------------------------------
+### Exercise 4
+ Change the period of invoking update7SEG function in order to set the frequency of 4
+ seven segment LEDs to 1Hz. The DOT is still blinking every second.
+ 
+ Report 1: Present the source code in the HAL_TIM_PeriodElapsedCallback.

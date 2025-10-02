@@ -122,10 +122,9 @@ void display7SEG(int num) {
 	}
 }
 
+/* ==================== update7SEG function ==================== */
 int index_led = 0;
 int led_buffer[4] = {0};
-
-/* ==================== update7SEG function ==================== */
 void update7SEG(int index){
 	// Turn off all 7SEG
 	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
@@ -159,7 +158,7 @@ void update7SEG(int index){
 	}
 }
 
-/* ==================== UpdateClockBuffer function ==================== */
+/* ==================== updateClockBuffer function ==================== */
 int hour = 15, minute = 8, second = 50;
 void updateClockBuffer(){
 	led_buffer[0] = hour / 10;
@@ -172,10 +171,8 @@ int main(void)
 {
   HAL_Init();
   SystemClock_Config();
-
   MX_GPIO_Init();
   MX_TIM2_Init();
-
   HAL_TIM_Base_Start_IT(&htim2);
 
   // Timer0: Blinky LED_RED, DOT
